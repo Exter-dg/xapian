@@ -25,8 +25,8 @@
 #include "opendocparse.h"
 #include "str.h"
 
-#include<archive.h>
-#include<archive_entry.h>
+#include <archive.h>
+#include <archive_entry.h>
 
 #include <cstring>
 
@@ -58,13 +58,13 @@ extract(const string& filename,
 
 	size_t total;
 	ssize_t size;
-	string s;
+	string s_content,s_meta,s_styles;
 
 	// extracting data from content.xml and styles.xml
 	while (archive_read_next_header(archive_obj, &entry) == ARCHIVE_OK) {
 	    if (strcmp(archive_entry_pathname(entry), "content.xml") == 0) {
 		total = archive_entry_size(entry);
-		char buf1[total];
+		char* buf1 = new char[total];
 		size = archive_read_data(archive_obj, buf1, total);
 
 		if (size <= 0) {
@@ -73,11 +73,12 @@ extract(const string& filename,
 		    return false;
 		}
 
-		s += str(buf1);
+		s_content += str(buf1);
+		delete []buf1;
 		} else if (strcmp(
 			archive_entry_pathname(entry), "styles.xml") == 0) {
 		total = archive_entry_size(entry);
-		char buf2[total];
+		char* buf2 = new char[total];
 		size = archive_read_data(archive_obj, buf2, total);
 
 		if (size <= 0) {
@@ -86,37 +87,40 @@ extract(const string& filename,
 		    return false;
 		}
 
-		s += str(buf2);
-		OpenDocParser parser;
-		parser.parse(s);
-		dump = parser.dump;
+		s_styles += str(buf2);
+		delete []buf2;
 		} else if (strcmp(
 			archive_entry_pathname(entry), "meta.xml") == 0) {
 		total = archive_entry_size(entry);
-		char buf3[total];
+		char* buf3 = new char[total];
 		size = archive_read_data(archive_obj, buf3, total);
 
-		if (size <= 0) {
-		    // error handling
+		if (size > 0) {
+		    // index the file even if this fails
+		    // hence doesn't return false for size<=0
+		    s_meta = str(buf3);
+		    MetaXmlParser metaxmlparser;
+		    metaxmlparser.parse(s_meta);
+		    title = metaxmlparser.title;
+		    keywords = metaxmlparser.keywords;
+		    author = metaxmlparser.author;
 		}
-
-		s = str(buf3);
-		MetaXmlParser metaxmlparser;
-		metaxmlparser.parse(s);
-		title = metaxmlparser.title;
-		keywords = metaxmlparser.keywords;
-		author = metaxmlparser.author;
+		delete []buf3;
 		}
 	}
+	s_content += s_styles;
+	OpenDocParser parser;
+	parser.parse(s_content);
+	dump = parser.dump;
 	status_code = archive_read_free(archive_obj);
 	if (status_code != ARCHIVE_OK) {
-	    return false;
+	    //return false;
 	}
 
 	} catch (...) {
 	    error = "Libarchive threw an exception";
 	    return false;
 	}
-
+	(void)pages;
 	return true;
 }

@@ -158,7 +158,7 @@ Worker::extract(const std::string& filename,
     string strpage, strstate;
     char state = MSG_FATAL_ERROR;
     // Sending a filename and wating for the answer
-    if (write_string(sockt, filename) && read_string(sockt, strstate)) {
+    if (write_string(sockt, filename) && read_string(sockt, strstate)) { //strstate stays empty//readsting returns false because getc returns -1(even without going in read_sttring)
 	error.clear();
 	if (!strstate.empty())
 	    state = strstate[0];
@@ -185,7 +185,40 @@ Worker::extract(const std::string& filename,
 		break;
 	}
     }
-    error = "The assistant process " + filter_module + " failed";
+
+    /*error.clear();
+    const char* p = filename.data();
+size_t len = filename.size();
+    while (len) {
+       size_t n = fwrite(p, 1, len, sockt);
+       if (n == 0) {
+	   // EOF.
+	   return false;
+       }
+       error+=to_string(n);
+       error+="###";
+       p += n;
+       len -= n;
+}
+     int ch = fgetc(sockt);
+     int err = errno;
+     if(ch==EOF)
+     error+=to_string(ch);
+     if(feof(sockt))
+     	error+="---eof---";
+    error+=strerror(err);
+    if(write_string(sockt, filename))
+    {
+	    int err = errno;
+	    error+="Before getc - ";
+	   error+=strerror(err);
+	    int ch = getc(sockt);
+	    error+=to_string(ch);
+	    error+="--after getc - ";
+	    err = errno;//broken pipe
+	    error+=strerror(err);
+    }*/
+    error += "The assistant process " + filter_module + " failed";
     fclose(sockt);
     sockt = NULL;
 

@@ -19,12 +19,13 @@
  * USA
  */
 #include <config.h>
+#include "omindexcheck.h"
 #include "worker.h"
 
-#include <xapian.h>
+//#include <xapian.h>
 #include <iostream>
-#include <string>
-#include <unordered_map>
+//#include <string>
+//#include <unordered_map>
 #include <cstdlib>
 
 #include "gnu_getopt.h"
@@ -33,13 +34,13 @@
 
 using namespace std;
 
-typedef vector<string> testcase;
+//typedef vector<string> testcase;
 
-unordered_map<string, testcase> tests;
+//unordered_map<string, testcase> tests;
+unordered_map<string, testcase> omindexcheck::tests;
 
-static void
-index_test()
-{
+void
+omindexcheck::register_tests() {
 #if defined HAVE_LIBARCHIVE
     // blank file
     tests.insert({"blank.odt", {}});
@@ -82,9 +83,8 @@ index_test()
 #endif
 }
 
-static bool
-compare_test(testcase& test, const Xapian::Document& doc, const string& file)
-{
+bool
+omindexcheck::compare_test(testcase& test, const Xapian::Document& doc, const string& file) {
     sort(test.begin(), test.end());
     Xapian::TermIterator term_iterator = doc.termlist_begin();
     for (auto& t : test) {
@@ -98,9 +98,34 @@ compare_test(testcase& test, const Xapian::Document& doc, const string& file)
     return true;
 }
 
+bool
+omindexcheck::check_terms(const Xapian::Document& doc, const string& file) {
+    Xapian::TermIterator term_iterator = doc.termlist_begin();
+    // no data
+    if (file == "blank.odt"){
+        for (; term_iterator != doc.termlist_end() ; term_iterator++){
+            if ((*term_iterator).find("Z") == 0 &&
+                ((*term_iterator)[1]>='a' && (*term_iterator)[1]<='z')){
+                return false;
+            }
+        }
+    }
+    // no author/title
+    else if (file == "libarchive_text_template.ott"){
+	    for (; term_iterator != doc.termlist_end() ; term_iterator++){
+		if ((*term_iterator).find("A") != string::npos ||
+                    (*term_iterator).find("S") != string::npos ) {
+			return false;
+	        }
+            }
+	}
+
+    return true;
+
+}
+
 int
-main(int argc, char** argv)
-{
+main(int argc, char** argv) {
     Xapian::Database db;
     bool succeed = true;
     if (argc <= 2)
@@ -108,7 +133,7 @@ main(int argc, char** argv)
     db.add_database(Xapian::Database(argv[2]));
     string url, current_dir(argv[1]);
 
-    index_test();
+    omindexcheck::register_tests();
     for (auto t = db.allterms_begin("U"); t != db.allterms_end("U"); ++t) {
 	const string& term = *t;
 	Xapian::PostingIterator p = db.postlist_begin(term);
@@ -130,9 +155,10 @@ main(int argc, char** argv)
 	url.assign(data, start, data.find('\n', start) - start);
 	start = url.find(current_dir) + current_dir.length();
 	url = url.substr(start, url.length());
-	auto it = tests.find(url);
-	if (it != tests.end())
-	    succeed &= compare_test(it->second, doc, url);
+	auto it = omindexcheck::tests.find(url);
+	if (it != omindexcheck::tests.end())
+	    succeed &= omindexcheck::compare_test(it->second, doc, url);
+        succeed &= omindexcheck::check_terms(doc, url);
     }
     return succeed ? 0 : 1;
 }

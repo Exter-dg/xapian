@@ -36,13 +36,8 @@ matrix:
             - libarchive-dev
             - libabw-dev
             - libcdr-dev
-            #- libextractor-dev
+            - libextractor-dev
       env: CPPFLAGS=-D_GLIBCXX_DEBUG
-      before_script:
-            - wget http://archive.ubuntu.com/ubuntu/pool/universe/libe/libextractor/libextractor_1.4.orig.tar.gz
-            - tar xzvf libextractor_1.4.orig.tar.gz
-            - cd libextractor-1.4/
-            - ./configure && make && sudo make install
     - compiler: clang
       os: linux
       # Clang is already installed, but we want to build using the
@@ -151,6 +146,7 @@ matrix:
             - libiconv
             - libmagic
             - libsvm
+            - libvorbis
             - lua
             - mono
             - pcre

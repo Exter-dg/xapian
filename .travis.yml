@@ -142,11 +142,11 @@ matrix:
             - libarchive
             - libcdr
             - libetonyek
+            - libvorbis
             - libextractor
             - libiconv
             - libmagic
             - libsvm
-            - libvorbis
             - lua
             - mono
             - pcre

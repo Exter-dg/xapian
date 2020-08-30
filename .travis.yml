@@ -37,6 +37,8 @@ matrix:
             - libabw-dev
             - libcdr-dev
             - libvorbis0a
+            - libsmf0
+            - libtidy5deb1
             #- libextractor-dev
       env: CPPFLAGS=-D_GLIBCXX_DEBUG
       before_script:

@@ -9,6 +9,8 @@ matrix:
       os: linux
       addons:
         apt:
+          sources:
+            - debian-sid
           packages:
             - doxygen
             - graphviz
@@ -36,16 +38,9 @@ matrix:
             - libarchive-dev
             - libabw-dev
             - libcdr-dev
-            - libvorbis0a
-            - libsmf0
-            - libtidy-0.99-0
-            #- libextractor-dev
+            - libextractor-dev
+            - libextractor-plugin-ogg
       env: CPPFLAGS=-D_GLIBCXX_DEBUG
-      before_script:
-            - wget http://ftpmirror.gnu.org/libextractor/libextractor-1.9.tar.gz
-            - tar xzvf libextractor-1.9.tar.gz
-            - cd libextractor-1.9/
-            - ./configure && make && sudo make install
     - compiler: clang
       os: linux
       # Clang is already installed, but we want to build using the

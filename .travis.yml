@@ -163,6 +163,7 @@ matrix:
         - tar xf libextractor-1.9.tar.gz
         - cd libextractor-1.9
         - ./configure && make && make install
+        - cd ..
       install:
         # Enable use of ccache to speed up builds.
         - export PATH=/usr/local/opt/ccache/libexec:$PATH

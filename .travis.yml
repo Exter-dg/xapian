@@ -39,7 +39,6 @@ matrix:
             - libabw-dev
             - libcdr-dev
             - libextractor-dev
-            - libextractor-plugin-ogg
       env: CPPFLAGS=-D_GLIBCXX_DEBUG
     - compiler: clang
       os: linux

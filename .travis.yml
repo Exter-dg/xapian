@@ -9,8 +9,6 @@ matrix:
       os: linux
       addons:
         apt:
-          sources:
-            - debian-sid
           packages:
             - doxygen
             - graphviz

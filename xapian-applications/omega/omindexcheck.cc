@@ -273,5 +273,5 @@ main(int argc, char** argv)
     else if (result == FAIL)
 	return 1;
     else
-	return 77;
+	return 1;
 }

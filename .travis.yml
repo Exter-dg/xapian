@@ -36,8 +36,13 @@ matrix:
             - libarchive-dev
             - libabw-dev
             - libcdr-dev
-            - libextractor-dev
+            #- libextractor-dev
       env: CPPFLAGS=-D_GLIBCXX_DEBUG
+      before_script:
+            - wget http://ftpmirror.gnu.org/libextractor/libextractor-1.3.tar.gz
+            - tar xzvf libextractor-1.3.tar.gz
+            - cd libextractor-1.3/
+            - ./configure && make && sudo make install
     - compiler: clang
       os: linux
       # Clang is already installed, but we want to build using the

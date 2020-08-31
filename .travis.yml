@@ -142,7 +142,6 @@ matrix:
             - libarchive
             - libcdr
             - libetonyek
-            - libextractor
             - libiconv
             - libmagic
             - libsvm
@@ -161,11 +160,11 @@ matrix:
         - mkdir -p /tmp/xapian-libsvm-fixed-include
         - ln -sF "`ls -1d /usr/local/Cellar/libsvm/3.*/include|tail -n 1`" /tmp/xapian-libsvm-fixed-include/libsvm
         - brew install libvorbis
-        #- curl "ftp://ftp.gnu.org/gnu/libextractor/libextractor-1.9.tar.gz" -o "libextractor-1.9.tar.gz"
-        #- tar xf libextractor-1.9.tar.gz
-        #- cd libextractor-1.9
-        #- ./configure && make && make install
-        #- cd ..
+        - curl "ftp://ftp.gnu.org/gnu/libextractor/libextractor-1.9.tar.gz" -o "libextractor-1.9.tar.gz"
+        - tar xf libextractor-1.9.tar.gz
+        - cd libextractor-1.9
+        - ./configure && make && make install
+        - cd .. && rm libextractor-1.9.tar.gz && rm -r libextractor-1.9
       install:
         # Enable use of ccache to speed up builds.
         - export PATH=/usr/local/opt/ccache/libexec:$PATH

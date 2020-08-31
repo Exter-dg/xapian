@@ -159,6 +159,7 @@ matrix:
         - travis_retry pip3 install sphinx
         - mkdir -p /tmp/xapian-libsvm-fixed-include
         - ln -sF "`ls -1d /usr/local/Cellar/libsvm/3.*/include|tail -n 1`" /tmp/xapian-libsvm-fixed-include/libsvm
+        - brew install libvorbis
         - curl "ftp://ftp.gnu.org/gnu/libextractor/libextractor-1.9.tar.gz" -o "libextractor-1.9.tar.gz"
         - tar xf libextractor-1.9.tar.gz
         - cd libextractor-1.9

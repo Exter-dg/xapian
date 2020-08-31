@@ -165,6 +165,7 @@ matrix:
         - tar xf libextractor-1.9.tar.gz
         - cd libextractor-1.9
         - ./configure && make && make install
+        - rm -r libextractor-1.9 && rm libextractor-1.9.tar.gz
         - cd xapian
       install:
         # Enable use of ccache to speed up builds.

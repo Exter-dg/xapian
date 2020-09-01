@@ -36,10 +36,8 @@ matrix:
             - libarchive-dev
             - libabw-dev
             - libcdr-dev
-            #- libextractor-dev..
-      before_install:
-            - sudo apt-get install libextractor-dev
-      env: CPPFLAGS=-D_GLIBCXX_DEBUG
+            - libextractor-dev..
+      env: CPPFLAGS=-D_GLIBCXX_DEBUG LIBEXTRACTOR_PREFIX='/usr/'
     - compiler: clang
       os: linux
       # Clang is already installed, but we want to build using the

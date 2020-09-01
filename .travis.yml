@@ -36,7 +36,9 @@ matrix:
             - libarchive-dev
             - libabw-dev
             - libcdr-dev
-            - libextractor-dev
+            #- libextractor-dev..
+      before_install:
+            - sudo apt-get install libextractor-dev
       env: CPPFLAGS=-D_GLIBCXX_DEBUG
     - compiler: clang
       os: linux

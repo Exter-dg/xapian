@@ -36,7 +36,7 @@ matrix:
             - libarchive-dev
             - libabw-dev
             - libcdr-dev
-            - libextractor-dev..
+            - libextractor-dev
       env: CPPFLAGS=-D_GLIBCXX_DEBUG LIBEXTRACTOR_PREFIX='/usr/local/'
     - compiler: clang
       os: linux

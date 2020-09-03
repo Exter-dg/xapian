@@ -37,7 +37,7 @@ matrix:
             - libabw-dev
             - libcdr-dev
             - libextractor-dev
-      env: CPPFLAGS=-D_GLIBCXX_DEBUG LIBEXTRACTOR_PREFIX='/usr/lib/x86_64-linux-gnu/libextractor'
+      env: CPPFLAGS=-D_GLIBCXX_DEBUG LIBEXTRACTOR_PREFIX='/usr/lib/x86_64-linux-gnu/'
     - compiler: clang
       os: linux
       # Clang is already installed, but we want to build using the
